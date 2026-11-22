@@ -20,6 +20,10 @@ def main() -> int:
         return 1
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(SOURCE, OUTPUT)
+    # Verify the copy is byte-complete before reporting success.
+    if OUTPUT.stat().st_size != SOURCE.stat().st_size:
+        print("copy incomplete", file=sys.stderr)
+        return 1
     print(f"wrote {OUTPUT} ({OUTPUT.stat().st_size} bytes)")
     return 0
 
